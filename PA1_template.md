@@ -99,12 +99,16 @@ print(nrow(activity[is.na(activity$steps),]))
 ## [1] 2304
 ```
 
+
+To filled in NA values, the average of each interval will be picked up. The process will be splitted the original data frame into 2 frames, one only includes NA rows, the other one only includes Non NA values. Once done that, merge NA frame with averaged interval data frame and drop NA column from result. Combine the newly get data frame with the Non NA frame and reorder by date/interval. The final data frame will be the filled NA value data frame.
+
+
 ```r
-#Imputing missing values
+#Inputing missing values
+
 #split activity into 2 frames. one only includes NA rows, the other one has all value filled.
 na_activity<- activity[is.na(activity$steps),]
 no_na_activity<- activity[!is.na(activity$steps),]
-
 #join interval average with the NA frame
 filled_na_activity<- merge(na_activity, avg_activity, by="interval" )
 #remove NA column
@@ -118,7 +122,7 @@ filled_activity <- filled_activity[order(filled_activity[,2], filled_activity[,3
 qplot(date, steps, data = filled_activity, geom = "histogram", stat = "identity", main = "Total number of steps taken each day")
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-3.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ```r
 sum_each_day_filled <- aggregate(. ~date, data = filled_activity, FUN= sum)
@@ -182,4 +186,4 @@ library(lattice)
 xyplot(steps~ interval | weekdays, data = avg_filled_activity_weekdays, type = "l", layout = c(1,2), main = "Average of steps for intervals across weekend and weekday")
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-4.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-2.png) 

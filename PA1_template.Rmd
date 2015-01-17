@@ -31,11 +31,17 @@ print(avg_activity[which.max(avg_activity$steps),]$interval)
 print("Total number of missing value:")
 print(nrow(activity[is.na(activity$steps),]))
 
-#Imputing missing values
+```
+
+
+To filled in NA values, the average of each interval will be picked up. The process will be splitted the original data frame into 2 frames, one only includes NA rows, the other one only includes Non NA values. Once done that, merge NA frame with averaged interval data frame and drop NA column from result. Combine the newly get data frame with the Non NA frame and reorder by date/interval. The final data frame will be the filled NA value data frame.
+
+```{r echo = TRUE}
+#Inputing missing values
+
 #split activity into 2 frames. one only includes NA rows, the other one has all value filled.
 na_activity<- activity[is.na(activity$steps),]
 no_na_activity<- activity[!is.na(activity$steps),]
-
 #join interval average with the NA frame
 filled_na_activity<- merge(na_activity, avg_activity, by="interval" )
 #remove NA column
